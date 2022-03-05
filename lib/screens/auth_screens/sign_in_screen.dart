@@ -1,9 +1,18 @@
-// ignore_for_file: prefer_final_fields
+// ignore_for_file: prefer_final_fields, must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:see_blogs_app/constants/values.dart';
-import 'package:see_blogs_app/core/helpers/validator.dart';
-import 'package:see_blogs_app/in_widgets/in_text_form_field.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:provider/provider.dart';
+import 'package:see_blogs_app/business/auth_manager.dart';
+import 'package:see_blogs_app/business/blog_manager.dart';
+import 'package:see_blogs_app/constants/strings/button_strings.dart';
+import 'package:see_blogs_app/constants/strings/title_strings.dart';
+import 'package:see_blogs_app/core/helpers/routes/named_routes.dart';
+import 'package:see_blogs_app/core/utilities/toastr.dart';
+import 'package:see_blogs_app/environment.dart';
+import 'package:see_blogs_app/in_widgets/in_button_colorful.dart';
+import 'package:see_blogs_app/in_widgets/in_button_white.dart';
+import 'package:see_blogs_app/in_widgets/loading_widget.dart';
 import 'package:see_blogs_app/screens/auth_screens/widgets/email_widget.dart';
 import 'package:see_blogs_app/screens/auth_screens/widgets/image_widget.dart';
 import 'package:see_blogs_app/screens/auth_screens/widgets/password_field.dart';
@@ -16,84 +25,74 @@ class SignInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign In')),
-      body: Container(
-        padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width / 10,
-            vertical: MediaQuery.of(context).size.height / 80),
-        // margin: EdgeInsets.symmetric(
-        //     horizontal: MediaQuery.of(context).size.width / 20,
-        //     vertical: MediaQuery.of(context).size.height / 20),
-        child: ListView(
-          children: [
-            Card(
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width / 40),
-                child: Form(
-                  key: _formKey,
-                  child: Column(children: [
-                    Divider(color: _color),
-                    const ImageWidget(),
-                    Divider(color: _color),
-                    const EmailField(),
-                    Divider(color: _color),
-                    const PasswordField(),
-                    Divider(color: _color),
-                    LoginButton(formKey: _formKey),
-                    Divider(color: _color),
-                    const RegisterButton(),
-                    Divider(color: _color),
-                  ]),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      appBar: AppBar(title: const Text(TitleStrings.SIGN_IN)),
+      body: _BuildSignInBody(formKey: _formKey, color: _color),
     );
   }
 }
 
-class RePasswordField extends StatelessWidget {
-  const RePasswordField({
+class _BuildSignInBody extends StatelessWidget {
+  const _BuildSignInBody({
     Key? key,
-  }) : super(key: key);
+    required GlobalKey<FormState> formKey,
+    required Color color,
+  })  : _formKey = formKey,
+        _color = color,
+        super(key: key);
+
+  final GlobalKey<FormState> _formKey;
+  final Color _color;
 
   @override
   Widget build(BuildContext context) {
-    return InTextFormField(
-      label: const Text('Re-Password'),
-      validator: Validations.validator.requiredValidator,
-      prefixIcon: const Icon(Icons.lock),
-      suffixIcon: const Icon(Icons.remove_red_eye),
-      obscureText: true,
-      textInputAction: TextInputAction.done,
+    return Container(
+      padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width / 10,
+          vertical: MediaQuery.of(context).size.height / 80),
+      child: ListView(
+        children: [
+          Card(
+            elevation: 7,
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width / 40),
+              child: Form(
+                key: _formKey,
+                child: Column(children: [
+                  Divider(color: _color),
+                  const ImageWidget(),
+                  Divider(color: _color),
+                  const EmailField(),
+                  Divider(color: _color),
+                  const PasswordField(),
+                  Divider(color: _color),
+                  LoginButton(formKey: _formKey),
+                  Divider(color: _color),
+                  const RegisterButton(),
+                  Divider(color: _color),
+                ]),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
 class RegisterButton extends StatelessWidget {
-  const RegisterButton({Key? key}) : super(key: key);
+  const RegisterButton({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-      icon: const Icon(
-        Icons.login,
-        color: Colors.black,
-      ),
-      style: OutlinedButton.styleFrom(
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        minimumSize: const Size(300, 50),
-      ),
-      label: const Text(
-        'Register',
-        style: TextStyle(color: Colors.black),
-      ),
-      onPressed: () {},
-    );
+    return InButtonWhite(
+        onPressed: () {
+          Navigator.pushReplacementNamed(context, NamedRoutes.SIGN_UP);
+        },
+        label: ButtonStrings.REGISTER,
+        icon: Icons.login);
   }
 }
 
@@ -106,36 +105,32 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton.icon(
-        onPressed: () {
-          if (formKey.currentState!.validate()) {
-          } else {}
+    return InButtonColorful(
+        onPressed: () async {
+          await signInButtonOperations(context);
         },
-        icon: const Icon(
-          Icons.login,
-          color: Colors.white,
-          size: 30,
-        ),
-        style: OutlinedButton.styleFrom(
-          backgroundColor: Colors.blueGrey.shade800,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          minimumSize: const Size(300, 50),
-        ),
-        label: const Text(
-          'Log in',
-          style: TextStyle(color: Colors.white),
-        ));
+        label: ButtonStrings.LOG_IN,
+        icon: Icons.login);
+  }
 
-    // return ListTile(
-    //   tileColor: Colors.blueGrey.shade800,
-    //   leading: Icon(
-    //     Icons.login,
-    //     color: Colors.white,
-    //   ),
-    //   shape: RoundedRectangleBorder(
-    //       borderRadius: BorderRadius.circular(Values.shapeCircularRadius)),
-    //   title: Text('Log in', textAlign: TextAlign.center),
-    // );
+  Future<void> signInButtonOperations(BuildContext context) async {
+    if (formKey.currentState!.validate()) {
+      LoadingWidget.getLoadingCircularDialog(context: context);
+
+      var result = await context.read<LoginManager>().signIn();
+      if (result.hasError == false) {
+        var box = await Hive.openBox('token');
+        await box.put('jwt', result.data?.token.toString());
+        Environment.token = await box.get('jwt');
+        box.close();
+        await context.read<BlogManager>().getBlogsWithCategoryId();
+
+        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, NamedRoutes.HOME);
+      } else {
+        Navigator.pop(context);
+        Toastr.buildErrorToast(result.message.toString());
+      }
+    }
   }
 }

@@ -7,4 +7,6 @@ class TitleStrings {
   static const String SIGN_UP = 'Sign Up';
   static const String HOME = 'Home';
   static const String ARTICLE_DETAIL = 'Article Detail';
+
+  static const String BLOGS="Blogs";
 }

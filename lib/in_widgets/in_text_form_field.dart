@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 
 class InTextFormField extends StatelessWidget {
@@ -12,12 +14,14 @@ class InTextFormField extends StatelessWidget {
     this.textInputAction,
     this.obscureText,
     this.validator,
+    this.keyboardType,
   }) : super(key: key);
   Widget? label;
   Widget? suffixIcon;
   Widget? prefixIcon;
   bool? obscureText;
   Widget? icon;
+  TextInputType? keyboardType;
 
   TextInputAction? textInputAction;
   void Function(String)? onFieldSubmitted;
@@ -30,6 +34,7 @@ class InTextFormField extends StatelessWidget {
       onChanged: onChanged,
       validator: validator,
       obscureText: obscureText ?? false,
+      keyboardType: keyboardType,
       textInputAction: textInputAction,
       decoration: InputDecoration(
           icon: icon,

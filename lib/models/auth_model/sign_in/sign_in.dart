@@ -3,22 +3,24 @@ import 'package:see_blogs_app/core/i_base_model.dart';
 
 part 'sign_in.g.dart';
 
+
 @JsonSerializable()
-class SignIn extends IBaseModel<SignIn> {
-  SignIn({required this.email, required this.password});
+class SignInModel extends IBaseModel<SignInModel> {
+  SignInModel({required this.email, required this.password});
 
   @JsonKey(name: 'Email')
   String email;
   @JsonKey(name: 'Password')
   String password;
 
-  factory SignIn.fromJson(Map<String, dynamic> json) => _$SignInFromJson(json);
+  factory SignInModel.fromJson(Map<String, dynamic> json) =>
+      _$SignInModelFromJson(json);
 
   @override
-  Map<String, dynamic> toJson() => _$SignInToJson(this);
+  Map<String, dynamic> toJson() => _$SignInModelToJson(this);
 
   @override
-  SignIn fromJson(Map<String, dynamic> json) {
-    return SignIn.fromJson(json);
+  SignInModel fromJson(Map<String, dynamic> json) {
+    return SignInModel.fromJson(json);
   }
 }

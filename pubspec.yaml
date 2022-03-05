@@ -1,5 +1,5 @@
 name: see_blogs_app
-description: A new Flutter project.
+description: Blogs Shown
 publish_to: "none"
 version: 1.0.0+1
 environment:
@@ -15,26 +15,43 @@ dependencies:
   # Camera & Gallery
   image_picker: ^0.8.4+10
 
-  # Network Request
+  # Network
   http: ^0.13.4
+
+  # Map
+  google_maps_flutter: ^2.1.2
+
+  # Local Database
+  shared_preferences: ^2.0.13
+  hive: ^2.0.6
+  hive_flutter: ^1.1.0
+
+
+  # Notify
+  fluttertoast: ^8.0.9
+
+  # Validation Helper
+  form_field_validator: ^1.1.0
 
   # Json Helper
   json_annotation: ^4.4.0
-  form_field_validator: ^1.1.0
-  fluttertoast: ^8.0.9
-  hive: ^2.0.6
+  flutter_html: ^2.2.1
+  dio: ^4.0.4
 
 # Only Development Mode
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^2.1.7
-
-  # Json Generator
+  # Generators
   json_serializable: ^6.1.4
+  hive_generator: ^1.1.2
+
 
   flutter_lints: ^1.0.0
 flutter:
   uses-material-design: true
+
+  # Assets
   assets:
     - assets/images/

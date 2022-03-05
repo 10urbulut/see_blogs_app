@@ -1,28 +1,34 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:see_blogs_app/core/i_base_model.dart';
-part 'response_model.g.dart';
+part 'login_model_data.g.dart';
 
 @JsonSerializable()
-class ResponseModel extends IBaseModel<ResponseModel> {
-  ResponseModel({
+class LogInModelData extends IBaseModel<LogInModelData> {
+  LogInModelData({
     this.validationErrors,
     this.hasError,
     this.message,
     this.data,
   });
 
+  @JsonKey(name: 'ValidationErrors')
   List<dynamic>? validationErrors;
+  @JsonKey(name: 'HasError')
   bool? hasError;
-  dynamic message;
+  @JsonKey(name: 'Message')
+  String? message;
+  @JsonKey(name: 'Data')
   Data? data;
-  factory ResponseModel.fromJson(Map<String, dynamic> json) =>
-      _$ResponseModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ResponseModelToJson(this);
+  factory LogInModelData.fromJson(Map<String, dynamic> json) =>
+      _$LogInModelDataFromJson(json);
 
   @override
-  ResponseModel fromJson(Map<String, dynamic> json) {
-    return ResponseModel.fromJson(json);
+  Map<String, dynamic> toJson() => _$LogInModelDataToJson(this);
+
+  @override
+  LogInModelData fromJson(Map<String, dynamic> json) {
+    return LogInModelData.fromJson(json);
   }
 }
 
@@ -31,11 +37,12 @@ class Data extends IBaseModel<Data> {
   Data({
     this.token,
   });
-
+@JsonKey(name: 'Token')
   String? token;
 
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$DataToJson(this);
 
   @override

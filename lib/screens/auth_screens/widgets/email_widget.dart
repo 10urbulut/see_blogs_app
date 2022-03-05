@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
 import 'package:see_blogs_app/business/auth_manager.dart';
+import 'package:see_blogs_app/constants/strings/text_strings.dart';
 import 'package:see_blogs_app/core/helpers/validator.dart';
 import 'package:see_blogs_app/in_widgets/in_text_form_field.dart';
 
@@ -13,14 +14,15 @@ class EmailField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InTextFormField(
-      label: const Text('Email'),
+      label: const Text(TextStrings.EMAIL),
       validator: MultiValidator([
         Validations.validator.emailValidator,
         Validations.validator.requiredValidator
       ]),
       prefixIcon: const Icon(Icons.mail),
+      keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
-      onChanged: (value) => context.read<AuthManager>().setEmail = value,
+      onChanged: (value) => context.read<LoginManager>().setEmail = value,
     );
   }
 }

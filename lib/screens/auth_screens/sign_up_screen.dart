@@ -1,8 +1,18 @@
-// ignore_for_file: prefer_final_fields
+// ignore_for_file: prefer_final_fields, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:see_blogs_app/business/auth_manager.dart';
+import 'package:see_blogs_app/constants/strings/button_strings.dart';
+import 'package:see_blogs_app/constants/strings/text_strings.dart';
+import 'package:see_blogs_app/constants/strings/title_strings.dart';
 import 'package:see_blogs_app/core/helpers/validator.dart';
+import 'package:see_blogs_app/core/utilities/toastr.dart';
+import 'package:see_blogs_app/in_widgets/in_button_colorful.dart';
+import 'package:see_blogs_app/in_widgets/in_button_white.dart';
 import 'package:see_blogs_app/in_widgets/in_text_form_field.dart';
+import 'package:see_blogs_app/core/helpers/routes/named_routes.dart';
+import 'package:see_blogs_app/in_widgets/loading_widget.dart';
 import 'package:see_blogs_app/screens/auth_screens/widgets/email_widget.dart';
 import 'package:see_blogs_app/screens/auth_screens/widgets/image_widget.dart';
 import 'package:see_blogs_app/screens/auth_screens/widgets/password_field.dart';
@@ -15,42 +25,57 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign Up')),
-      body: Container(
-        padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width / 10,
-            vertical: MediaQuery.of(context).size.height / 80),
-        // margin: EdgeInsets.symmetric(
-        //     horizontal: MediaQuery.of(context).size.width / 20,
-        //     vertical: MediaQuery.of(context).size.height / 20),
-        child: ListView(
-          children: [
-            Card(
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width / 40),
-                child: Form(
-                  key: _formKey,
-                  child: Column(children: [
-                    Divider(color: _color),
-                    const ImageWidget(),
-                    Divider(color: _color),
-                    const EmailField(),
-                    Divider(color: _color),
-                    const PasswordField(),
-                    Divider(color: _color),
-                    const RePasswordField(),
-                    Divider(color: _color),
-                    RegisterButton(formKey: _formKey),
-                    Divider(color: _color),
-                    const LoginButton(),
-                    Divider(color: _color),
-                  ]),
-                ),
+      appBar: AppBar(title: const Text(TitleStrings.SIGN_UP)),
+      body: _BuildSignUpBody(formKey: _formKey, color: _color),
+    );
+  }
+}
+
+class _BuildSignUpBody extends StatelessWidget {
+  const _BuildSignUpBody({
+    Key? key,
+    required GlobalKey<FormState> formKey,
+    required Color color,
+  })  : _formKey = formKey,
+        _color = color,
+        super(key: key);
+
+  final GlobalKey<FormState> _formKey;
+  final Color _color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width / 10,
+          vertical: MediaQuery.of(context).size.height / 80),
+      child: ListView(
+        children: [
+          Card(
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width / 40),
+              child: Form(
+                key: _formKey,
+                child: Column(children: [
+                  Divider(color: _color),
+                  const ImageWidget(),
+                  Divider(color: _color),
+                  const EmailField(),
+                  Divider(color: _color),
+                  const PasswordField(),
+                  Divider(color: _color),
+                  const RePasswordField(),
+                  Divider(color: _color),
+                  RegisterButton(formKey: _formKey),
+                  Divider(color: _color),
+                  const LoginButton(),
+                  Divider(color: _color),
+                ]),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -64,12 +89,13 @@ class RePasswordField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InTextFormField(
-      label: const Text('Re-Password'),
+      label: const Text(TextStrings.RE_PASSWORD),
       validator: Validations.validator.requiredValidator,
       prefixIcon: const Icon(Icons.lock),
       suffixIcon: const Icon(Icons.remove_red_eye),
       obscureText: true,
       textInputAction: TextInputAction.done,
+      onChanged: (value) => context.read<LoginManager>().setRePassword = value,
     );
   }
 }
@@ -79,20 +105,27 @@ class RegisterButton extends StatelessWidget {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-      icon: const Icon(Icons.login, size: 30),
-      style: OutlinedButton.styleFrom(
-        backgroundColor: Colors.blueGrey.shade800,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        minimumSize: const Size(300, 50),
-      ),
-      label: const Text('Register'),
-      onPressed: () {
-        if (formKey.currentState!.validate()) {
-          print("fsdf");
-        } else {}
-      },
-    );
+    return InButtonColorful(
+        onPressed: () async {
+          await registerButtonOperations(context);
+        },
+        label: ButtonStrings.REGISTER,
+        icon: Icons.login);
+  }
+
+  Future<void> registerButtonOperations(BuildContext context) async {
+    if (formKey.currentState!.validate()) {
+      LoadingWidget.getLoadingCircularDialog(context: context);
+
+      var result = await context.read<LoginManager>().signUp();
+      if (result.hasError == false) {
+        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, NamedRoutes.HOME);
+      } else {
+        Navigator.pop(context);
+        Toastr.buildErrorToast(result.message.toString());
+      }
+    }
   }
 }
 
@@ -103,21 +136,12 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton.icon(
-        onPressed: () {},
-        icon: const Icon(
-          Icons.login,
-          color: Colors.black,
-        ),
-        style: OutlinedButton.styleFrom(
-          backgroundColor: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          minimumSize: const Size(300, 50),
-        ),
-        label: const Text(
-          'Login',
-          style: TextStyle(color: Colors.black),
-        ));
+    return InButtonWhite(
+      onPressed: () {
+        Navigator.pushReplacementNamed(context, NamedRoutes.SIGN_IN);
+      },
+      label: ButtonStrings.LOG_IN,
+      icon: Icons.login,
+    );
   }
 }
