@@ -33,7 +33,7 @@ class BaseService<T> {
   }
 
   static Future<http.Response> post<T extends IBaseModel>(
-      {required String path,  IBaseModel? model}) async {
+      {required String path, IBaseModel? model}) async {
     String uri = Environment.baseUri + path;
 
     var toJson = jsonEncode(model?.toJson());
@@ -103,7 +103,7 @@ class BaseService<T> {
   }
 
   static dynamic jsonBodyParser<T>(IBaseModel model, String body) {
-    final jsonBody = jsonDecode(body);
+    var jsonBody = jsonDecode(body);
 
     if (jsonBody is List<Map<String, dynamic>>) {
       return jsonBody.map((e) => model.fromJson(e)).toList().cast<T>();

@@ -33,7 +33,7 @@ class BlogService extends BaseService<BlogService> {
         headers: Environment.apiHeader);
 
     BlogModelData modelData =
-        BaseService.jsonBodyParser(BlogModelData(), response.body);
+        (BlogModelData.fromJson(jsonDecode(response.body)));
 
     modelData.hasError == true
         ? Toastr.buildErrorToast(modelData.message.toString())

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:hive_flutter/adapters.dart';
 import 'package:http/http.dart';
 import 'package:see_blogs_app/core/base_service.dart';
@@ -17,7 +19,7 @@ class LogInService extends BaseService<LogInService> {
     Response response =
         await BaseService.post(path: "Login/SignIn", model: signIn);
     LogInModelData signInModelData =
-        BaseService.jsonBodyParser(LogInModelData(), response.body);
+        LogInModelData.fromJson(jsonDecode(response.body));
     responseAndTokenRegisteringOperations(signInModelData);
     return signInModelData;
   }
