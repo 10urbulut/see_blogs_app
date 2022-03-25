@@ -20,7 +20,7 @@ class LogInService extends BaseService<LogInService> {
         await BaseService.post(path: "Login/SignIn", model: signIn);
     LogInModelData signInModelData =
         LogInModelData.fromJson(jsonDecode(response.body));
-    responseAndTokenRegisteringOperations(signInModelData);
+    await responseAndTokenRegisteringOperations(signInModelData);
     return signInModelData;
   }
 

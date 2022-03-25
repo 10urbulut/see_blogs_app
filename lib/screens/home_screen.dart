@@ -4,6 +4,7 @@ import 'package:see_blogs_app/business/blog_manager.dart';
 import 'package:see_blogs_app/constants/enums.dart';
 import 'package:see_blogs_app/constants/strings/text_strings.dart';
 import 'package:see_blogs_app/constants/strings/title_strings.dart';
+import 'package:see_blogs_app/core/helpers/routes/named_routes.dart';
 import 'package:see_blogs_app/in_widgets/loading_widget.dart';
 import 'package:see_blogs_app/screens/common_widgets/articles_gridview.dart';
 
@@ -22,7 +23,10 @@ class _HomeScreenState extends State<HomeScreen> {
     context.read<BlogManager>().getCategories;
     context.read<BlogManager>().blogs.isNotEmpty
         ? null
-        : context.read<BlogManager>().getBlogsWithCategoryId();
+        : context.read<BlogManager>().getBlogsWithCategoryId().then((value) =>
+            value.isEmpty
+                ? Navigator.pushReplacementNamed(context, NamedRoutes.SIGN_IN)
+                : null);
     super.initState();
   }
 

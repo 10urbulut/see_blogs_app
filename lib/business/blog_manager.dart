@@ -21,11 +21,12 @@ class BlogManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getBlogsWithCategoryId({String? categoryId}) async {
+  Future<List<BlogModel>> getBlogsWithCategoryId({String? categoryId}) async {
     var result = await _service.getBlogs(categoryId: categoryId);
     _blogs.clear();
     _blogs.addAll(result);
     notifyListeners();
+    return _blogs;
   }
 
   void addFavoriteBlogToList(BlogModel favoriteBlog) {
