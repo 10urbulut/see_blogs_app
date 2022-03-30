@@ -32,8 +32,7 @@ class SeeBlogsAppMain extends StatelessWidget {
   }
 }
 
-String get _initialRoute =>
-    Environment.token == "" ? NamedRoutes.SIGN_IN : NamedRoutes.HOME;
+String get _initialRoute => NamedRoutes.PROFILE;
 
 Future<void> checkTokenIsExist() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,5 +41,4 @@ Future<void> checkTokenIsExist() async {
   Hive.registerAdapter(TokenHiveModelAdapter());
   var box = await Hive.openBox('token');
   Environment.token = box.get('jwt').toString();
-  
 }

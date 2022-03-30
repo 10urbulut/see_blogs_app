@@ -29,7 +29,7 @@ class LogInService extends BaseService<LogInService> {
         await BaseService.post(path: "Login/SignUp", model: signUp);
     LogInModelData signUpModelData =
         BaseService.jsonBodyParser(LogInModelData(), response.body);
-    responseAndTokenRegisteringOperations(signUpModelData);
+    await responseAndTokenRegisteringOperations(signUpModelData);
 
     return signUpModelData;
   }

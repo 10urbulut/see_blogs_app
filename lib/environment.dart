@@ -1,5 +1,5 @@
 class Environment {
-  static const String baseUri = "http://test20.internative.net/";
+  static const String baseUri = "http://baseurl.net/";
   static late String token;
   static Map<String, String> apiHeader = {
     "content-type": "application/json",

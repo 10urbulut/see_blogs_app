@@ -1,16 +1,29 @@
 # see_blogs_app
 
-A new Flutter project.
+This project prepared for job interviews. So, if you want to curious about screens; you can see below.
 
-## Getting Started
+# Screens
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+- # Sign in screen
+ ![singin](https://res.cloudinary.com/dlzwvem1a/image/upload/v1648670214/see_blogs_flutter/sign_in123_nhwrif.png)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- # Sign up screen
+ ![signup](https://res.cloudinary.com/dlzwvem1a/image/upload/v1648670214/see_blogs_flutter/sign_up123_q1uukh.png)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+ - # Home screen
+ ![home](https://res.cloudinary.com/dlzwvem1a/image/upload/v1648670214/see_blogs_flutter/home123_bksaak.png)
+
+ - # Favorites screen
+ ![signup](https://res.cloudinary.com/dlzwvem1a/image/upload/v1648670214/see_blogs_flutter/favorites123_wsirxo.png)
+ 
+ - # Profile screen
+ ![signup](https://res.cloudinary.com/dlzwvem1a/image/upload/v1648670215/see_blogs_flutter/profile123_rrm1lz.png)
+ 
+ - # Pick screen
+ ![signup](https://res.cloudinary.com/dlzwvem1a/image/upload/v1648670214/see_blogs_flutter/choose_pick_type123_puhh1u.png)
+ 
+ - # Preview screen
+ ![signup](https://res.cloudinary.com/dlzwvem1a/image/upload/v1648670215/see_blogs_flutter/select_photo123_ivocpr.png)
+
+

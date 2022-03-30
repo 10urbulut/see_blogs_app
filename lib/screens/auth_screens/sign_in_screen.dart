@@ -13,6 +13,7 @@ import 'package:see_blogs_app/environment.dart';
 import 'package:see_blogs_app/in_widgets/in_button_colorful.dart';
 import 'package:see_blogs_app/in_widgets/in_button_white.dart';
 import 'package:see_blogs_app/in_widgets/loading_widget.dart';
+import 'package:see_blogs_app/models/login_model_data/login_model_data.dart';
 import 'package:see_blogs_app/screens/auth_screens/widgets/email_widget.dart';
 import 'package:see_blogs_app/screens/auth_screens/widgets/image_widget.dart';
 import 'package:see_blogs_app/screens/auth_screens/widgets/password_field.dart';
@@ -119,10 +120,7 @@ class LoginButton extends StatelessWidget {
 
       var result = await context.read<LoginManager>().signIn();
       if (result.hasError == false) {
-        var box = await Hive.openBox('token');
-        await box.put('jwt', result.data?.token.toString());
-        Environment.token = await box.get('jwt');
-        box.close();
+        await tokenBoxOperations(result);
         await context.read<BlogManager>().getBlogsWithCategoryId();
 
         Navigator.pop(context);
@@ -132,5 +130,12 @@ class LoginButton extends StatelessWidget {
         Toastr.buildErrorToast(result.message.toString());
       }
     }
+  }
+
+  Future<void> tokenBoxOperations(LogInModelData result) async {
+      var box = await Hive.openBox('token');
+    await box.put('jwt', result.data?.token.toString());
+    Environment.token = await box.get('jwt');
+    box.close();
   }
 }
